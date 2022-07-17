@@ -1,4 +1,4 @@
-import { DayType } from "./types";
+import { DayType } from "../types/day";
 
 export const getDayColor = (dayType: DayType, isLoading: boolean): string => {
   if (isLoading) {
