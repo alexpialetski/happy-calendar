@@ -2,13 +2,22 @@ import { useEffect, useState, createContext, useCallback } from "react";
 
 import { getUserInfo } from "../service/user.service";
 import { User } from "../types/user";
-import { getTokens, saveCode } from "../utils/session";
+import {
+  getTokens,
+  removeCode,
+  removeTokens,
+  saveCode,
+} from "../utils/session";
 
 export const UserContext = createContext<{
   user?: User;
   login: () => void;
+  logout: () => void;
 }>({
   login: () => {
+    return;
+  },
+  logout: () => {
     return;
   },
 });
@@ -27,6 +36,12 @@ export const UserContextProvider = ({
 
   const login = useCallback(() => getUserInfo().then(setUser), []);
 
+  const logout = useCallback(() => {
+    removeCode();
+    removeTokens();
+    setUser(undefined);
+  }, []);
+
   useEffect(() => {
     if (accessToken || refreshToken || code) {
       login();
@@ -41,7 +56,7 @@ export const UserContextProvider = ({
   }, [urlCode]);
 
   return (
-    <UserContext.Provider value={{ user, login }}>
+    <UserContext.Provider value={{ user, login, logout }}>
       {children}
     </UserContext.Provider>
   );

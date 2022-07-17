@@ -16,6 +16,7 @@ import Container from "@mui/material/Container";
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import LoginIcon from "@mui/icons-material/Login";
+import LogoutIcon from "@mui/icons-material/Logout";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 
 import { AppBar } from "./AppBar";
@@ -63,7 +64,7 @@ export const Dashboard: React.FC<{ children: React.ReactNode }> = ({
 }) => {
   const location = useLocation();
   const theme = useTheme();
-  const { user, login } = useContext(UserContext);
+  const { user, login, logout } = useContext(UserContext);
   const [open, setOpen] = useState(
     window.innerWidth > theme.breakpoints.values.md
   );
@@ -99,16 +100,15 @@ export const Dashboard: React.FC<{ children: React.ReactNode }> = ({
                 {currentPageName}
               </Typography>
             </Box>
-            {user ? (
-              <Box display="flex" alignItems="center">
-                {user.username}
-                <AccountCircleIcon sx={{ ml: 1 }} />
-              </Box>
-            ) : (
-              <IconButton edge="start" color="inherit" onClick={login}>
-                <LoginIcon />
-              </IconButton>
-            )}
+            <IconButton
+              edge="start"
+              color="inherit"
+              onClick={user ? logout : login}
+              sx={{ display: "flex", alignItems: "center" }}
+            >
+              {user?.username}
+              {user ? <LogoutIcon sx={{ ml: 1 }} /> : <LoginIcon />}
+            </IconButton>
           </Toolbar>
         </AppBar>
         <Drawer variant="permanent" open={open} drawerWidth={drawerWidth}>
